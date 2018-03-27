@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  sonarqube:
+    container_name: $CONTAINER_APP_NAME
+    image: sonarqube:7.0
+    ports:
+      - "$CONTAINER_APP_PORT:9000"
+      - "9092:9092"
+    environment:
+      SONARQUBE_JDBC_USERNAME:  $DB_USER
+      SONARQUBE_JDBC_PASSWORD:  $DB_PASS
+      SONARQUBE_JDBC_URL: jdbc:postgresql://$CONTAINER_DB_NAME/$DB_NAME
+
+  postgres:
+    container_name: $CONTAINER_DB_NAME
+    image: postgres:10
+    environment:
+      POSTGRES_USER:  $DB_USER
+      POSTGRES_PASSWORD: $DB_PASS
+      POSTGRES_DB: $DB_NAME
+    ports:
+      - "$CONTAINER_DB_PORT:5432"
+
+networks:
+  default:
+    external:
+      name: $DOCKER_NETWORK
