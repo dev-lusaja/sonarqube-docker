@@ -1,0 +1,5 @@
+falcon==1.4.1
+gunicorn==19.7.1
+PyYAML==3.12
+dependency_injector==3.11.3
+requests==2.18.4

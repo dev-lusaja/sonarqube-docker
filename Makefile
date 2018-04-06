@@ -1,20 +1,20 @@
 .DEFAULT_GOAL := help
 
-PROJECT_NAME ?= sonarqube
+PROJECT_NAME = sonarqube
 
 #Application config
-CONTAINER_APP_NAME ?= sonarqube
-CONTAINER_APP_PORT ?= 9000
+CONTAINER_APP_NAME = sonarqube_app
+CONTAINER_APP_PORT = 9000
 
 # database config
-CONTAINER_DB_NAME ?= sonarqube_db
-CONTAINER_DB_PORT ?= 5432
-DB_USER ?= sonar
-DB_PASS ?= sonar
-DB_NAME ?= sonar
+CONTAINER_DB_NAME = sonarqube_db
+CONTAINER_DB_PORT = 5432
+DB_USER = sonar
+DB_PASS = sonar
+DB_NAME = sonar
 
 #Network config
-DOCKER_NETWORK ?= sonar_network
+DOCKER_NETWORK = sonar_network
 
 up: ## up docker containers
 	@make verify_network &> /dev/null
@@ -26,8 +26,8 @@ up: ## up docker containers
 	DB_PASS=$(DB_PASS) \
 	DB_NAME=$(DB_NAME) \
 	DOCKER_NETWORK=$(DOCKER_NETWORK) \
-	docker-compose -p $(PROJECT_NAME) up
-	@docker-compose -p $(PROJECT_NAME) ps
+	docker-compose -p $(PROJECT_NAME) up -d
+	@docker ps
 
 down: ## Stop and remove the docker containers, use me with: make down
 	@CONTAINER_APP_NAME=$(CONTAINER_APP_NAME) \
@@ -44,6 +44,14 @@ ssh: ## Connect to container for ssh protocol
 	docker exec -it $(CONTAINER_APP_NAME) bash
 
 logs: ## Show docker logs
+	@CONTAINER_APP_NAME=$(CONTAINER_APP_NAME) \
+	CONTAINER_APP_PORT=$(CONTAINER_APP_PORT) \
+	CONTAINER_DB_NAME=$(CONTAINER_DB_NAME) \
+	CONTAINER_DB_PORT=$(CONTAINER_DB_PORT) \
+	DB_USER=$(DB_USER) \
+	DB_PASS=$(DB_PASS) \
+	DB_NAME=$(DB_NAME) \
+	DOCKER_NETWORK=$(DOCKER_NETWORK) \
 	docker-compose -p $(PROJECT_NAME) logs -f
 
 scanner: ## Run sonar scanner

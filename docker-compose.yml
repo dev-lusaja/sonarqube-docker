@@ -4,9 +4,9 @@ services:
   sonarqube:
     container_name: $CONTAINER_APP_NAME
     image: sonarqube:7.0
+    restart: always
     ports:
-      - "$CONTAINER_APP_PORT:9000"
-      - "9092:9092"
+      - $CONTAINER_APP_PORT:9000
     environment:
       SONARQUBE_JDBC_USERNAME:  $DB_USER
       SONARQUBE_JDBC_PASSWORD:  $DB_PASS
@@ -15,12 +15,36 @@ services:
   postgres:
     container_name: $CONTAINER_DB_NAME
     image: postgres:10
+    restart: always
     environment:
       POSTGRES_USER:  $DB_USER
       POSTGRES_PASSWORD: $DB_PASS
       POSTGRES_DB: $DB_NAME
     ports:
       - "$CONTAINER_DB_PORT:5432"
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+
+#  jenkins:
+#    container_name: Jenkins
+#    image: jenkins:2.60.3-alpine
+#    restart: always
+#    ports:
+#      - 8080:8080
+#      - 6000:5000
+
+  webhook:
+    container_name: CONTAINER_WEBHOOK_NAME
+    image: python:3.6-alpine
+    restart: always
+    ports:
+      - $CONTAINER_WEBHOOK_PORT:9090
+    volumes:
+      - ./web_hook:/web_hook
+    working_dir: /web_hook
+    command: sh -c "pip install -r requirements.txt && gunicorn -b :9090 hook:api"
+    ports:
+      - 9090:9090
 
 networks:
   default:
