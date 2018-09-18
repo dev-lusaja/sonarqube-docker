@@ -17,7 +17,6 @@ DB_NAME = sonar
 DOCKER_NETWORK = sonar_network
 
 up: ## up docker containers
-	@make verify_network &> /dev/null
 	@CONTAINER_APP_NAME=$(CONTAINER_APP_NAME) \
 	CONTAINER_APP_PORT=$(CONTAINER_APP_PORT) \
 	CONTAINER_DB_NAME=$(CONTAINER_DB_NAME) \

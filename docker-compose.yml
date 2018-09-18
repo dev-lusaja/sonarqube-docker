@@ -33,20 +33,20 @@ services:
 #      - 8080:8080
 #      - 6000:5000
 
-  webhook:
-    container_name: CONTAINER_WEBHOOK_NAME
-    image: python:3.6-alpine
-    restart: always
-    ports:
-      - $CONTAINER_WEBHOOK_PORT:9090
-    volumes:
-      - ./web_hook:/web_hook
-    working_dir: /web_hook
-    command: sh -c "pip install -r requirements.txt && gunicorn -b :9090 hook:api"
-    ports:
-      - 9090:9090
+#  webhook:
+#    container_name: CONTAINER_WEBHOOK_NAME
+#    image: python:3.6-alpine
+#    restart: always
+#    ports:
+#      - $CONTAINER_WEBHOOK_PORT:9090
+#    volumes:
+#      - ./web_hook:/web_hook
+#    working_dir: /web_hook
+#    command: sh -c "pip install -r requirements.txt && gunicorn -b :9090 hook:api"
+#    ports:
+#      - 9090:9090
 
-networks:
-  default:
-    external:
-      name: $DOCKER_NETWORK
+#networks:
+#  default:
+#    external:
+#      name: $DOCKER_NETWORK
